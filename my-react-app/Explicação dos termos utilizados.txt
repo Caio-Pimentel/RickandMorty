@@ -1,0 +1,53 @@
+﻿Explicação dos termos utilizados:
+import { useState, useEffect } from "react";: Importa os hooks useState e useEffect do React. useState é usado para criar estados no componente funcional, e useEffect é usado para realizar efeitos colaterais, como buscar dados da API quando o componente é montado.
+
+
+import 'bootstrap/dist/css/bootstrap.min.css';: Importa o arquivo CSS do Bootstrap para estilização.
+
+
+function App() { ... }: Define o componente funcional principal do aplicativo.
+
+
+const [character, setCharacter] = useState({ ... });: Define o estado character com useState. character contém as informações do personagem, e setCharacter é a função usada para atualizar esse estado.
+
+
+const fetchCharacter = async (id) => { ... }: Define a função assíncrona fetchCharacter que busca os dados de um personagem na API.
+
+
+const response = await fetch(...);: Faz uma requisição à API e aguarda a resposta.
+
+
+if (!response.ok) throw new Error("Character not found");: Verifica se a resposta foi bem-sucedida. Se não for, lança um erro.
+
+
+const data = await response.json();: Converte a resposta da API em JSON.
+
+
+const episodeNumbers = data.episode.map(ep => ep.split('/').pop()).join(', ');: Extrai os números dos episódios das URLs e os junta em uma string.
+
+
+setCharacter({ ... });: Atualiza o estado character com os dados recebidos da API.
+
+
+const handleInputChange = (e) => { ... }: Define a função handleInputChange para lidar com mudanças no campo de entrada.
+
+
+const handlePrevious = () => { ... }: Define a função handlePrevious para buscar o personagem anterior.
+
+
+const handleNext = () => { ... }: Define a função handleNext para buscar o próximo personagem.
+
+
+useEffect(() => { ... }, []);: Usa o hook useEffect para buscar o personagem com ID 1 quando o componente é montado.
+
+
+<form onSubmit={(e) => { ... }}>: Define um formulário com um manipulador de evento onSubmit para buscar o personagem com o ID fornecido.
+
+
+<button type="button" ...>: Define os botões para buscar o personagem anterior, atual e próximo.
+
+
+export default App;: Exporta o componente App para ser usado em outros arquivos.
+
+
+Cada linha e bloco de código tem uma função específica e colabora para buscar e exibir dados dos personagens da API Rick and Morty.

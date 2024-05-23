@@ -1,0 +1,153 @@
+import { useState, useEffect } from "react";
+
+function App() {
+  // Define um estado chamado 'character' para armazenar os dados do personagem
+  // useState inicializa o estado com um objeto vazio contendo propriedades do personagem
+  const [character, setCharacter] = useState({
+    id: "",
+    name: "",
+    status: "",
+    species: "",
+    gender: "",
+    origin: "",
+    location: "",
+    created: "",
+    episode: "",
+    image: ""
+  });
+
+  // Função assíncrona para buscar dados de um personagem específico da API
+  const fetchCharacter = async (id) => {
+    try {
+      // Faz uma requisição para a API com o ID fornecido
+      const response = await fetch(`https://rickandmortyapi.com/api/character/${id}`);
+      // Verifica se a resposta é bem-sucedida
+      if (!response.ok) throw new Error("Personagem não encontrado");
+
+      // Converte a resposta da API para JSON
+      const data = await response.json();
+
+      // Extrai os números dos episódios a partir das URLs
+      const episodeNumbers = data.episode.map(ep => ep.split('/').pop()).join(', ');
+      const episodeText = `Aparece nos episódios: ${episodeNumbers}`;
+
+      // Atualiza o estado do personagem com os dados recebidos
+      setCharacter({
+        id: data.id,
+        name: data.name,
+        status: data.status,
+        species: data.species,
+        gender: data.gender,
+        origin: data.origin.name,
+        location: data.location.name,
+        created: data.created,
+        episode: episodeText,
+        image: data.image
+      });
+    } catch (error) {
+      // Em caso de erro, loga o erro no console
+      console.error("Error fetching character:", error);
+    }
+  };
+
+  // Função para lidar com mudanças no campo de entrada
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    // Atualiza o estado do personagem com o novo valor do campo de entrada
+    setCharacter((prevCharacter) => ({
+      ...prevCharacter,
+      [id]: value
+    }));
+  };
+
+  // Função para buscar o personagem anterior
+  const handlePrevious = () => {
+    const newId = parseInt(character.id) - 1;
+    if (newId > 0) fetchCharacter(newId);
+  };
+
+  // Função para buscar o próximo personagem
+  const handleNext = () => {
+    const newId = parseInt(character.id) + 1;
+    fetchCharacter(newId);
+  };
+
+  // useEffect é um hook que executa a função passada como argumento quando o componente é montado
+  // Aqui, ele busca o personagem com ID 1 quando a página é carregada
+  useEffect(() => {
+    fetchCharacter(1);
+  }, []);
+
+  return (
+    <div className="container mt-5">
+      <div className="row">
+        {/* Coluna para exibir a imagem do personagem */}
+        <div className="col">
+          {character.image && (
+            <img alt={character.name} style={{ width: "82%" }} src={character.image} className="rounded"/>
+          )}
+        </div>
+        {/* Coluna para exibir os detalhes do personagem */}
+        <div className="col">
+          <div className="card">
+            <div className="card-body">
+              {/* Formulário para buscar personagens */}
+              <form onSubmit={(e) => { e.preventDefault(); fetchCharacter(character.id); }}>
+                <div className="mb-3">
+                  <label htmlFor="id" className="form-label">ID:</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="id"
+                    value={character.id}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div >
+                {/* Botão para buscar o personagem anterior */}
+                <button type="button" className="btn btn-primary" onClick={handlePrevious}>
+                  Anterior
+                </button>
+                {/* Botão para buscar o personagem atual */}
+                <button type="submit" className="btn btn-primary mx-2">
+                  Consultar
+                </button>
+                {/* Botão para buscar o próximo personagem */}
+                <button type="button" className="btn btn-primary" onClick={handleNext}>
+                  Próximo
+                </button>
+                </div>
+                <div className="mb-3">
+                  <p><strong>Nome:</strong> {character.name}</p>
+                </div>
+                <div className="mb-3">
+                  <p><strong>Status:</strong> {character.status}</p>
+                </div>
+                <div className="mb-3">
+                  <p><strong>Espécie:</strong> {character.species}</p>
+                </div>
+                <div className="mb-3">
+                  <p><strong>Gênero:</strong> {character.gender}</p>
+                </div>
+                <div className="mb-3">
+                  <p><strong>Origem:</strong> {character.origin}</p>
+                </div>
+                <div className="mb-3">
+                  <p><strong>Local:</strong> {character.location}</p>
+                </div>
+                <div className="mb-3">
+                  <p><strong>Criação:</strong> {character.created}</p>
+                </div>
+                <div className="mb-3">
+                  <p><strong>Episódios:</strong> {character.episode}</p>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default App;

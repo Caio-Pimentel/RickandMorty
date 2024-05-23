@@ -1,0 +1,220 @@
+import { useState } from "react";
+
+function App() {
+  const [id, setid] = useState("");
+  const [name, setname] = useState("");
+  const [status, setstatus] = useState("");
+  const [species, setspecies] = useState("");
+  const [gender, setgender] = useState("");
+  const [origin, setorigin] = useState("");
+  const [location, setlocation] = useState("");
+  const [created, setcreated] = useState("");
+  const [episode, setepisode] = useState("");
+  const [imagem, setimg] = useState("");
+
+
+
+// Ainda está faltando Imágem, Orígem, Localidade, Criação e Episódios ?/json/?
+  const buscarid = async () => {
+    const url = `https://rickandmortyapi.com/api/character/${id}`
+
+    const response = await fetch(url);
+    const endereco = await response.json();
+    console.log(endereco);
+
+    setid(endereco.id)
+    setname(endereco.name)
+    setstatus(endereco.status)
+    setspecies(endereco.species)
+    setgender(endereco.gender)
+    setorigin(endereco.origin.name)
+    setlocation(endereco.location.name)
+    setcreated(endereco.created)
+    // Agora eu preciso dividir o arrey dos episódios com o split e cocatenar os resultados
+    setepisode(endereco.episode)
+    // for (let index = 0; index < endereco.episode.length; index++) {
+    //   const element = endereco.episode[index];
+    //   console.log(element)
+      
+    // }
+    setimg(endereco.image)
+
+  }
+
+
+
+  return (
+    // Container que abriga imagem + formulário
+    <div className="container mt-5">
+      <div className="row">
+        {/* div da imagem */}
+        <div className="col">
+          <img 
+          alt="" 
+          style={{ width: "100%" }} 
+          id="img"
+          src={imagem}
+          onChange={(element) => setimg(element.target.value)}
+          />
+        </div>
+        {/* Div responsável pelo formulário */}
+        <div className="col">
+          <div className="card">
+            <div className="card-body">
+              <form>
+                {/* Div responsável pelo id = Vai ser o Id */}
+                <div className="mb-3">
+                  <label htmlFor="id" className="form-label">
+                    Id
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="id"
+                    placeholder="EX: Id"
+                    // onBlur={buscarid}
+                    onClick={buscarid}
+                    value={id}
+                    onChange={(element) => setid(element.target.value)}
+                  />
+                </div>
+                {/* Div responsável pelo name = Nome */}
+                <div className="mb-3">
+                  <label htmlFor="name" className="form-label">
+                    Nome
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="name"
+                    placeholder="EX: Nome"
+                    value={name}  
+                    onChange={(element) => setname(element.target.value)}
+                  />
+                </div>
+                {/* status = Status */}
+                <div className="mb-3">
+                  <label htmlFor="status" className="form-label">
+                    Status
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="status"
+                    placeholder="EX: Status"
+                    readOnly
+                    value={status}
+                    onChange={(element) => setstatus(element.target.value)}
+                  />
+                </div>
+                {/* species = Espécie */}
+                <div className="mb-3">
+                  <label htmlFor="species" className="form-label">
+                  Espécie
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="species"
+                    placeholder="EX: Espécie"
+                    readOnly
+                    value={species}
+                    onChange={(element) => setspecies(element.target.value)}
+                  />
+                </div>
+                {/* gender = Genero */}
+                <div className="mb-3">
+                  <label htmlFor="gender" className="form-label">
+                    Gênero
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="gender"
+                    placeholder="EX: Gênero"
+                    value={gender}
+                    onChange={(element) => setgender(element.target.value)}
+                  />
+                </div>
+                {/* Origem */}
+                <div className="mb-3">
+                  <label htmlFor="origin" className="form-label">
+                  Origem
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="origin"
+                    placeholder="EX: Origem"
+                    value={origin}
+                    onChange={(element) => setorigin(element.target.value)}
+                  />
+                </div>
+                {/* Local */}
+                <div className="mb-3">
+                  <label htmlFor="location" className="form-label">
+                    Local
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="Local"
+                    placeholder="EX: Local"
+                    value={location}
+                    onChange={(element) => setlocation(element.target.value)}
+                  />
+                </div>
+                {/* Criação = created*/}
+                <div className="mb-3">
+                  <label htmlFor="created" className="form-label">
+                    Criação
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="created"
+                    placeholder="EX: Criação"
+                    value={created}
+                    onChange={(element) => setcreated(element.target.value)}
+                  />
+                </div>
+                {/* Episódios = episode */}
+                <div className="mb-3">
+                  <label htmlFor="episode" className="form-label">
+                    Episódios
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="Episódios"
+                    placeholder="EX: Episódios"
+                    value={episode}
+                    onChange={(element) => setepisode(element.target.value)}
+                  />
+                </div>
+                {/* Botão de anterior */}
+                <button type="submit" className="btn btn-primary">
+                  Anterior
+                </button>
+                {/* botão de consultar - Não tá funcionando */}
+                <button 
+                type="submit" 
+                className="btn btn-primary"
+                onSubmit={buscarid}
+                >
+                  Constultar
+                </button>
+                {/* botão de próximo */}
+                <button type="submit" className="btn btn-primary">
+                  Próximo
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default App;
